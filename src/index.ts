@@ -47,15 +47,24 @@ console.log("⚖️  Copyright Agent — powered by @the-brain/core");
 console.log("   Ask about copyright law, fair use, licenses, or describe your situation.");
 console.log("   Ctrl+C to exit.\n");
 
+const spin = ["⠋","⠙","⠹","⠸","⠼","⠴","⠦","⠧","⠇","⠏"];
+let si = 0;
+
 const ask = () => {
-  rl.question("You: ", async (input) => {
+  rl.question("\x1b[36mTy:\x1b[0m ", async (input) => {
     const text = input.trim();
     if (!text) { ask(); return; }
 
+    const t = setInterval(() => process.stdout.write(`\r\x1b[33m${spin[si++ % 10]}\x1b[0m Myślę...`), 80);
+
     try {
       const result = await brain.process(USER_ID, text);
-      console.log(`\nAgent: ${result.answer}\n`);
+      clearInterval(t);
+      process.stdout.write("\r\x1b[2K");
+      console.log(`\x1b[32mAgent\x1b[0m [${result.action}]: ${result.answer}\n`);
     } catch (err) {
+      clearInterval(t);
+      process.stdout.write("\r\x1b[2K");
       console.error("Error:", err);
     }
 
