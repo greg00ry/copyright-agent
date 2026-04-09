@@ -1,0 +1,23 @@
+{
+  "name": "copyright-agent",
+  "version": "1.0.0",
+  "description": "AI copyright law assistant built on @the-brain/core",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "ingest": "tsx src/ingest.ts"
+  },
+  "dependencies": {
+    "@the-brain/adapter-sqlite": "^0.2.3",
+    "@the-brain/core": "^0.2.3",
+    "dotenv": "^16.4.5",
+    "pdf-parse": "^2.4.5",
+    "tsx": "^4.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pdf-parse": "^1.1.5",
+    "typescript": "^5.5.3"
+  }
+}
