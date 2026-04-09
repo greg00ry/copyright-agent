@@ -6,11 +6,12 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
-    "ingest": "tsx src/ingest.ts"
+    "ingest": "tsx src/ingest.ts",
+    "test": "tsx src/test.ts"
   },
   "dependencies": {
-    "@the-brain/adapter-sqlite": "^0.2.3",
-    "@the-brain/core": "^0.2.3",
+    "@the-brain/adapter-sqlite": "^0.2.4",
+    "@the-brain/core": "^0.2.4",
     "dotenv": "^16.4.5",
     "pdf-parse": "^2.4.5",
     "tsx": "^4.16.0"

@@ -3,7 +3,6 @@ import * as readline from "readline";
 import { Brain, OpenAICompatibleAdapter } from "@the-brain/core";
 import { SQLiteStorageAdapter } from "@the-brain/adapter-sqlite";
 import { COPYRIGHT_PERSONALITY } from "./personality.js";
-import { copyrightActions } from "./actions.js";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -34,10 +33,6 @@ const brain = new Brain(
 );
 
 await brain.loadActions();
-
-for (const { name, description, handler } of copyrightActions) {
-  await brain.registerAction(name, description, handler);
-}
 
 // ─── Chat ─────────────────────────────────────────────────────────────────────
 
