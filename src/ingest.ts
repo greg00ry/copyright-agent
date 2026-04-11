@@ -9,17 +9,27 @@ const LLM_URL = process.env.LLM_API_URL ?? "http://localhost:11434/v1/chat/compl
 const LLM_MODEL = process.env.LLM_MODEL ?? "llama3.2";
 const LLM_API_KEY = process.env.LLM_API_KEY ?? "local";
 const USER_ID = process.env.USER_ID ?? "default";
-const CHUNK_SIZE = 800;
-const OVERLAP = 150;
+const MAX_CHUNK_SIZE = 1500;
 
 function chunkText(text: string): string[] {
+  // Split on article boundaries (Art. 1., Art. 23., Art. 231. etc.)
+  const parts = text.split(/(?=Art\.\s+\d+[¹²³]?\.\s)/);
+
   const chunks: string[] = [];
-  let start = 0;
-  while (start < text.length) {
-    chunks.push(text.slice(start, start + CHUNK_SIZE).trim());
-    start += CHUNK_SIZE - OVERLAP;
+  for (const part of parts) {
+    const trimmed = part.trim();
+    if (trimmed.length < 30) continue;
+    // If a single article is too long, split it further by character
+    if (trimmed.length <= MAX_CHUNK_SIZE) {
+      chunks.push(trimmed);
+    } else {
+      for (let i = 0; i < trimmed.length; i += MAX_CHUNK_SIZE) {
+        const sub = trimmed.slice(i, i + MAX_CHUNK_SIZE).trim();
+        if (sub.length > 30) chunks.push(sub);
+      }
+    }
   }
-  return chunks.filter(c => c.length > 30);
+  return chunks;
 }
 
 const brain = new Brain(
