@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { readFileSync } from "node:fs";
-import { Brain, OpenAICompatibleAdapter } from "@the-brain/core";
+import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter } from "@the-brain/core";
 import { SQLiteStorageAdapter } from "@the-brain/adapter-sqlite";
 import { COPYRIGHT_PERSONALITY } from "./personality.js";
 import { PDFParse } from "pdf-parse";
@@ -25,7 +25,7 @@ function chunkText(text: string): string[] {
 const brain = new Brain(
   new OpenAICompatibleAdapter(LLM_URL, LLM_MODEL, LLM_API_KEY),
   new SQLiteStorageAdapter("./.brain"),
-  undefined,
+  new OpenAICompatibleEmbeddingAdapter("http://localhost:11434/v1/embeddings", "nomic-embed-text"),
   { systemPrompt: COPYRIGHT_PERSONALITY }
 );
 

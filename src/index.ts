@@ -1,6 +1,6 @@
 import "dotenv/config";
 import * as readline from "readline";
-import { Brain, OpenAICompatibleAdapter } from "@the-brain/core";
+import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter } from "@the-brain/core";
 import { SQLiteStorageAdapter } from "@the-brain/adapter-sqlite";
 import { COPYRIGHT_PERSONALITY } from "./personality.js";
 
@@ -13,10 +13,13 @@ const USER_ID = process.env.USER_ID ?? "default";
 
 // ─── Brain ────────────────────────────────────────────────────────────────────
 
+const EMBEDDING_URL = process.env.EMBEDDING_API_URL ?? "http://localhost:11434/v1/embeddings";
+const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL ?? "nomic-embed-text";
+
 const brain = new Brain(
   new OpenAICompatibleAdapter(LLM_URL, LLM_MODEL, LLM_API_KEY),
   new SQLiteStorageAdapter("./.brain"),
-  undefined,
+  new OpenAICompatibleEmbeddingAdapter(EMBEDDING_URL, EMBEDDING_MODEL),
   {
     systemPrompt: COPYRIGHT_PERSONALITY,
     llm: {

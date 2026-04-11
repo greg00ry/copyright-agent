@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Brain, OpenAICompatibleAdapter } from "@the-brain/core";
+import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter } from "@the-brain/core";
 import { SQLiteStorageAdapter } from "@the-brain/adapter-sqlite";
 import { COPYRIGHT_PERSONALITY } from "./personality.js";
 const LLM_URL = process.env.LLM_API_URL ?? "http://localhost:11434/v1/chat/completions";
@@ -10,7 +10,7 @@ const USER_ID = process.env.USER_ID ?? "default";
 const brain = new Brain(
   new OpenAICompatibleAdapter(LLM_URL, LLM_MODEL, LLM_API_KEY),
   new SQLiteStorageAdapter("./.brain"),
-  undefined,
+  new OpenAICompatibleEmbeddingAdapter("http://localhost:11434/v1/embeddings", "nomic-embed-text"),
   { systemPrompt: COPYRIGHT_PERSONALITY, llm: { responseMaxTokens: 2000 } }
 );
 
