@@ -1,19 +1,16 @@
 import "dotenv/config";
-import { rmSync } from "fs";
-import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter, SavingPlugin, MemoryPlugin } from "@the-brain/core";
+import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter, MemoryPlugin } from "@the-brain/core";
 import { SQLiteStorageAdapter } from "@the-brain/adapter-sqlite";
 import { COPYRIGHT_PERSONALITY } from "./personality.js";
-
-rmSync("./.brain-test", { recursive: true, force: true });
 
 const LLM_URL = process.env.LLM_API_URL ?? "http://localhost:11434/v1/chat/completions";
 const LLM_MODEL = process.env.LLM_MODEL ?? "llama3.2";
 const LLM_API_KEY = process.env.LLM_API_KEY ?? "local";
-const USER_ID = "test-user";
+const USER_ID = process.env.USER_ID ?? "default";
 
 const brain = new Brain(
   new OpenAICompatibleAdapter(LLM_URL, LLM_MODEL, LLM_API_KEY),
-  new SQLiteStorageAdapter("./.brain-test"),
+  new SQLiteStorageAdapter("./.brain"),
   new OpenAICompatibleEmbeddingAdapter(
     process.env.EMBEDDING_API_URL ?? "http://localhost:11434/v1/embeddings",
     process.env.EMBEDDING_MODEL ?? "nomic-embed-text",
@@ -21,7 +18,7 @@ const brain = new Brain(
   { systemPrompt: COPYRIGHT_PERSONALITY, llm: { responseMaxTokens: 500 } }
 );
 
-await brain.use(new SavingPlugin(), new MemoryPlugin());
+await brain.use(new MemoryPlugin());
 await brain.loadActions();
 
 const questions: string[] = process.argv.slice(2).length
