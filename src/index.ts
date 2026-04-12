@@ -29,6 +29,7 @@ const brain = new Brain(
       synapseTreeDepth: 6,
       decayWindowMs: 60 * 24 * 60 * 60 * 1000, // 60 days
       synapseMode: "embedding",
+      contextTopEntries: 15,
     },
     chat: {
       maintenanceEveryN: 30,

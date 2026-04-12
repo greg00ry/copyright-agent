@@ -27,10 +27,10 @@ await brain.loadActions();
 const questions: string[] = process.argv.slice(2).length
   ? process.argv.slice(2)
   : [
-    "how long does copyright last after the author dies?",  // RESEARCH_BRAIN — pytanie o prawo
-    "is a logo I designed automatically protected?",        // RESEARCH_BRAIN — praktyczny case
-    "remember: copyright registration is not required in the US", // SAVE_ONLY — zapis faktu
-    "what did I just note about copyright registration?",   // RESEARCH_BRAIN — recall zapisanego
+    "jak długo trwa ochrona praw autorskich po śmierci twórcy?", // RESEARCH_BRAIN — pytanie o prawo
+    "czy logo które zaprojektowałem jest automatycznie chronione?", // RESEARCH_BRAIN — praktyczny case
+    "zapamiętaj: dozwolony użytek pozwala cytować fragmenty bez zgody autora", // SAVE_ONLY — zapis faktu
+    "co właśnie zapisałem o dozwolonym użytku?",            // RESEARCH_BRAIN — recall zapisanego
   ];
 
 let passed = 0;
