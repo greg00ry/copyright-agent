@@ -1,6 +1,6 @@
 import "dotenv/config";
 import * as readline from "readline";
-import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter } from "@the-brain/core";
+import { Brain, OpenAICompatibleAdapter, OpenAICompatibleEmbeddingAdapter, SavingPlugin, MemoryPlugin } from "@the-brain/core";
 import { SQLiteStorageAdapter } from "@the-brain/adapter-sqlite";
 import { COPYRIGHT_PERSONALITY } from "./personality.js";
 
@@ -11,10 +11,10 @@ const LLM_MODEL = process.env.LLM_MODEL ?? "llama3.2";
 const LLM_API_KEY = process.env.LLM_API_KEY ?? "local";
 const USER_ID = process.env.USER_ID ?? "default";
 
-// ─── Brain ────────────────────────────────────────────────────────────────────
-
 const EMBEDDING_URL = process.env.EMBEDDING_API_URL ?? "http://localhost:11434/v1/embeddings";
 const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL ?? "nomic-embed-text";
+
+// ─── Brain ────────────────────────────────────────────────────────────────────
 
 const brain = new Brain(
   new OpenAICompatibleAdapter(LLM_URL, LLM_MODEL, LLM_API_KEY),
@@ -28,6 +28,7 @@ const brain = new Brain(
     memory: {
       synapseTreeDepth: 6,
       decayWindowMs: 60 * 24 * 60 * 60 * 1000, // 60 days
+      synapseMode: "embedding",
     },
     chat: {
       maintenanceEveryN: 30,
@@ -35,7 +36,33 @@ const brain = new Brain(
   }
 );
 
+await brain.use(new SavingPlugin(), new MemoryPlugin());
 await brain.loadActions();
+
+// ─── Intent points ────────────────────────────────────────────────────────────
+// Called on every start so embeddings stay up to date.
+
+await brain.addIntentExamples("RESEARCH_BRAIN", [
+  "what is fair use?",
+  "can I use this image?",
+  "is my work protected by copyright?",
+  "how long does copyright last?",
+  "what is creative commons?",
+  "explain DMCA takedown",
+  "can I sample this song?",
+  "is this in the public domain?",
+  "what are my rights as an author?",
+  "can I use this code from GitHub?",
+]);
+
+await brain.addIntentExamples("SAVE_ONLY", [
+  "remember that",
+  "save this",
+  "note that",
+  "I want to store this",
+  "zapamiętaj",
+  "zapisz to",
+]);
 
 // ─── Chat ─────────────────────────────────────────────────────────────────────
 
