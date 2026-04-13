@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@the-brain/adapter-sqlite": "^0.2.10",
-    "@the-brain/core": "^0.2.19",
+    "@the-brain/core": "^0.2.21",
     "dotenv": "^16.4.5",
     "pdf-parse": "^2.4.5",
     "tsx": "^4.16.0"
